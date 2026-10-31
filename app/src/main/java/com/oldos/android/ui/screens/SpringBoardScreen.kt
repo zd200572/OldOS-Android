@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,22 +19,35 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.oldos.android.R
 import com.oldos.android.model.AppItem
+import com.oldos.android.model.DeviceApp
+import com.oldos.android.model.DeviceAppsRepository
 import com.oldos.android.ui.components.*
 import com.oldos.android.ui.theme.IOS4FontFamily
+import com.oldos.android.ui.theme.IOS4IconLabelStyle
+import com.oldos.android.ui.theme.IOS4IconLabelText
+import com.oldos.android.ui.theme.IOS4IconLabelShadow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SpringBoardScreen(
@@ -99,8 +113,22 @@ fun SpringBoardScreen(
         )
     }
 
-    // 0: Spotlight, 1: Page1, 2: Page2
-    val pagerState = rememberPagerState(initialPage = initialPage, pageCount = { 3 })
+    // Real installed Android apps, appended as extra springboard pages
+    val context = LocalContext.current
+    var deviceApps by remember { mutableStateOf<List<DeviceApp>>(emptyList()) }
+    LaunchedEffect(Unit) {
+        deviceApps = withContext(Dispatchers.IO) { DeviceAppsRepository.loadDeviceApps(context) }
+    }
+    fun launchDeviceApp(app: DeviceApp) {
+        context.startActivity(DeviceAppsRepository.launchIntent(context, app) ?: return)
+    }
+    val devicePages = remember(deviceApps) { deviceApps.chunked(16) }
+
+    // 0: Spotlight, 1: Page1, 2: Page2, 3+: real device apps
+    val pagerState = rememberPagerState(
+        initialPage = initialPage,
+        pageCount = { 3 + devicePages.size }
+    )
 
     // iOS 4 Utilities folder overlay
     var openFolder by remember { mutableStateOf(false) }
@@ -152,14 +180,16 @@ fun SpringBoardScreen(
                     .weight(1f)
                     .fillMaxWidth()
             ) { pageIndex ->
-                when (pageIndex) {
-                    0 -> {
+                when {
+                    pageIndex == 0 -> {
                         SpotlightPage(
                             allApps = page1Apps + page2Apps + dockApps,
-                            onAppOpen = onAppOpen
+                            deviceApps = deviceApps,
+                            onAppOpen = onAppOpen,
+                            onLaunchDevice = ::launchDeviceApp
                         )
                     }
-                    1 -> {
+                    pageIndex == 1 -> {
                         AppIconGrid(
                             apps = page1Apps,
                             isEditMode = isEditMode,
@@ -171,7 +201,7 @@ fun SpringBoardScreen(
                             onAppLongClick = { onEditModeChange(true) }
                         )
                     }
-                    2 -> {
+                    pageIndex == 2 -> {
                         AppIconGrid(
                             apps = page2Apps,
                             isEditMode = isEditMode,
@@ -183,12 +213,18 @@ fun SpringBoardScreen(
                             onAppLongClick = { onEditModeChange(true) }
                         )
                     }
+                    pageIndex - 3 in devicePages.indices -> {
+                        DeviceAppGrid(
+                            apps = devicePages[pageIndex - 3],
+                            onAppClick = ::launchDeviceApp
+                        )
+                    }
                 }
             }
 
             // Page Dots indicator
             IOS4PageIndicator(
-                pageCount = 2,
+                pageCount = 2 + devicePages.size,
                 currentPage = pagerState.currentPage,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
@@ -305,22 +341,25 @@ private fun AppIconGrid(
 
 /**
  * iOS 4 Spotlight search page: dark translucent sheet over the wallpaper with
- * a rounded search field and result rows (icon + name), searching every
- * installed OldOS app.
+ * a rounded search field and result rows (icon + name). Searches every
+ * installed OldOS app plus every real Android app on the device.
  */
 @Composable
 private fun SpotlightPage(
     allApps: List<AppItem>,
-    onAppOpen: (AppItem) -> Unit
+    deviceApps: List<DeviceApp>,
+    onAppOpen: (AppItem) -> Unit,
+    onLaunchDevice: (DeviceApp) -> Unit
 ) {
     var query by remember { mutableStateOf("") }
 
-    val results = remember(query, allApps) {
-        if (query.isBlank()) {
-            allApps
-        } else {
-            allApps.filter { it.title.contains(query.trim(), ignoreCase = true) }
-        }
+    val osResults = remember(query, allApps) {
+        if (query.isBlank()) allApps
+        else allApps.filter { it.title.contains(query.trim(), ignoreCase = true) }
+    }
+    val deviceResults = remember(query, deviceApps) {
+        if (query.isBlank()) emptyList()
+        else deviceApps.filter { it.label.contains(query.trim(), ignoreCase = true) }.take(20)
     }
 
     Box(
@@ -370,9 +409,10 @@ private fun SpotlightPage(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Results: alternating translucent rows, iOS 4 spotlight style
+            // Results: alternating translucent rows, iOS 4 spotlight style.
+            // OldOS apps first, then matching real device apps (with a query).
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(results) { app ->
+                items(osResults) { app ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -398,8 +438,179 @@ private fun SpotlightPage(
                         IOS4ChevronGlyph(tint = Color.White.copy(alpha = 0.55f))
                     }
                 }
+
+                if (deviceResults.isNotEmpty()) {
+                    item {
+                        Text(
+                            text = "APPS ON THIS PHONE",
+                            color = Color.White.copy(alpha = 0.55f),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = IOS4FontFamily,
+                            modifier = Modifier.padding(start = 10.dp, top = 8.dp, bottom = 2.dp)
+                        )
+                    }
+                }
+                items(deviceResults, key = { "device_" + it.packageName }) { app ->
+                    DeviceResultRow(app = app, onClick = { onLaunchDevice(app) })
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun DeviceResultRow(app: DeviceApp, onClick: () -> Unit) {
+    val context = LocalContext.current
+    val icon by produceState<android.graphics.Bitmap?>(initialValue = null, app) {
+        value = withContext(Dispatchers.IO) {
+            DeviceAppsRepository.loadIcon(context, app, 96)
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0x14000000))
+            .clickable { onClick() }
+            .padding(horizontal = 8.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        DeviceAppTile(icon = icon, size = 34.dp)
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            text = app.label,
+            color = Color.White,
+            fontSize = 16.sp,
+            fontFamily = IOS4FontFamily,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
+        )
+        IOS4ChevronGlyph(tint = Color.White.copy(alpha = 0.55f))
+    }
+}
+
+/**
+ * A real Android app icon presented in an iOS 4 home-icon shell: centered on
+ * a white rounded tile so third-party artwork sits naturally on the grid.
+ */
+@Composable
+fun DeviceAppTile(icon: android.graphics.Bitmap?, size: androidx.compose.ui.unit.Dp) {
+    Box(
+        modifier = Modifier
+            .size(size)
+            .clip(RoundedCornerShape(size * 0.22f))
+            .background(Color.White)
+            .border(0.5.dp, Color(0x33000000), RoundedCornerShape(size * 0.22f)),
+        contentAlignment = Alignment.Center
+    ) {
+        val bmp = icon
+        if (bmp != null) {
+            Image(
+                bitmap = bmp.asImageBitmap(),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxSize(0.82f)
+            )
+        }
+    }
+}
+
+/** Grid of real installed Android apps (one springboard page). */
+@Composable
+private fun DeviceAppGrid(
+    apps: List<DeviceApp>,
+    onAppClick: (DeviceApp) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp)
+            .padding(top = 4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        apps.chunked(4).forEachIndexed { rowIndex, row ->
+            if (rowIndex > 0) {
+                Spacer(modifier = Modifier.height(13.dp))
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.Top
+            ) {
+                row.forEach { app ->
+                    DeviceAppCell(app = app, onClick = { onAppClick(app) })
+                }
+                if (row.size < 4) {
+                    repeat(4 - row.size) {
+                        Spacer(modifier = Modifier.width(80.dp))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DeviceAppCell(app: DeviceApp, onClick: () -> Unit) {
+    val context = LocalContext.current
+    val icon by produceState<android.graphics.Bitmap?>(initialValue = null, app) {
+        value = withContext(Dispatchers.IO) {
+            DeviceAppsRepository.loadIcon(context, app, 128)
+        }
+    }
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.90f else 1.0f,
+        label = "device_icon_press"
+    )
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .width(80.dp)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) { onClick() },
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(top = 6.dp)
+                .size(58.dp)
+                .scale(scale)
+                .clip(RoundedCornerShape(13.dp))
+                .background(Color.White)
+                .border(0.5.dp, Color(0x33000000), RoundedCornerShape(13.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            val bmp = icon
+            if (bmp != null) {
+                Image(
+                    bitmap = bmp.asImageBitmap(),
+                    contentDescription = app.label,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxSize(0.8f)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(3.dp))
+        Text(
+            text = app.label,
+            color = IOS4IconLabelText,
+            style = IOS4IconLabelStyle.copy(
+                shadow = Shadow(
+                    color = IOS4IconLabelShadow,
+                    offset = Offset(0f, 1.5f),
+                    blurRadius = 2.5f
+                )
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
