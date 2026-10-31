@@ -220,6 +220,7 @@ class MainActivity : ComponentActivity() {
                                                         "settings" -> SettingsScreen(onHomeClick = onHomeClick)
                                                         "calculator" -> CalculatorScreen(onHomeClick = onHomeClick)
                                                         "clock" -> ClockScreen(onHomeClick = onHomeClick)
+                                                        "calendar" -> CalendarScreen(onHomeClick = onHomeClick)
                                                         "notes" -> NotesScreen(onHomeClick = onHomeClick)
                                                         "weather" -> WeatherScreen(onHomeClick = onHomeClick)
                                                         "contacts" -> ContactsScreen(onHomeClick = onHomeClick)

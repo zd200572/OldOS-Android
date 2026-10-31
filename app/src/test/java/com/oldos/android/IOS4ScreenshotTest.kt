@@ -247,6 +247,14 @@ class IOS4ScreenshotTest {
     }
 
     @Test
+    fun calendar() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.CalendarScreen(onHomeClick = {}) }
+        }
+        capture("20_calendar")
+    }
+
+    @Test
     fun placeholder() {
         composeRule.setContent {
             OldOSTheme {
