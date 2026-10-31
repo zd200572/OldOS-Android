@@ -175,6 +175,14 @@ class IOS4ScreenshotTest {
     }
 
     @Test
+    fun safari() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.SafariScreen(onHomeClick = {}) }
+        }
+        capture("11_safari")
+    }
+
+    @Test
     fun placeholder() {
         composeRule.setContent {
             OldOSTheme {

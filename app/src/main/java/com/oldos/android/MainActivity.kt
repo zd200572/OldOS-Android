@@ -245,6 +245,13 @@ class MainActivity : ComponentActivity() {
                                                             osState = OSState.HOME
                                                         }
                                                     )
+                                                } else if (app != null && app.id == "safari") {
+                                                    SafariScreen(
+                                                        onHomeClick = {
+                                                            currentOpenedApp = null
+                                                            osState = OSState.HOME
+                                                        }
+                                                    )
                                                 } else if (app != null && app.id == "calculator") {
                                                     CalculatorScreen(
                                                         onHomeClick = {
