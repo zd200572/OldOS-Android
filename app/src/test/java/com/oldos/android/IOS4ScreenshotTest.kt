@@ -1,10 +1,19 @@
 package com.oldos.android
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.unit.dp
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.oldos.android.model.AppItem
+import com.oldos.android.ui.components.IOS4PageIndicator
 import com.oldos.android.ui.screens.AppPlaceholderScreen
 import com.oldos.android.ui.screens.CalculatorScreen
 import com.oldos.android.ui.screens.LockScreen
@@ -57,6 +66,38 @@ class IOS4ScreenshotTest {
             }
         }
         capture("02_springboard")
+    }
+
+    @Test
+    fun spotlight() {
+        composeRule.setContent {
+            OldOSTheme {
+                SpringBoardScreen(
+                    onAppOpen = {},
+                    isEditMode = false,
+                    onEditModeChange = {},
+                    initialPage = 0
+                )
+            }
+        }
+        capture("02b_spotlight")
+    }
+
+    @Test
+    fun pageIndicatorDebug() {
+        composeRule.setContent {
+            OldOSTheme {
+                Box(
+                    modifier = Modifier
+                        .size(width = 200.dp, height = 40.dp)
+                        .background(Color.Black),
+                    contentAlignment = Alignment.Center
+                ) {
+                    IOS4PageIndicator(pageCount = 2, currentPage = 1)
+                }
+            }
+        }
+        capture("_indicator_debug")
     }
 
     @Test
