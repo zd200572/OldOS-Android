@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.oldos.android.R
@@ -101,6 +102,12 @@ fun SpringBoardScreen(
     // 0: Spotlight, 1: Page1, 2: Page2
     val pagerState = rememberPagerState(initialPage = initialPage, pageCount = { 3 })
 
+    // iOS 4 Utilities folder overlay
+    var openFolder by remember { mutableStateOf(false) }
+    val folderApps = remember(allApps) {
+        allApps.filter { it.id in setOf("clock", "calculator", "compass", "voicememos") }
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -158,6 +165,7 @@ fun SpringBoardScreen(
                             isEditMode = isEditMode,
                             onAppClick = { app ->
                                 if (isEditMode) onEditModeChange(false)
+                                else if (app.id == "folder_utilities") openFolder = true
                                 else onAppOpen(app)
                             },
                             onAppLongClick = { onEditModeChange(true) }
@@ -169,6 +177,7 @@ fun SpringBoardScreen(
                             isEditMode = isEditMode,
                             onAppClick = { app ->
                                 if (isEditMode) onEditModeChange(false)
+                                else if (app.id == "folder_utilities" || app.id == "utilities_full") openFolder = true
                                 else onAppOpen(app)
                             },
                             onAppLongClick = { onEditModeChange(true) }
@@ -194,6 +203,56 @@ fun SpringBoardScreen(
                 },
                 onAppLongClick = { onEditModeChange(true) }
             )
+        }
+
+        // iOS 4 Utilities folder overlay: dimmed backdrop + notched panel
+        if (openFolder) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.55f))
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { openFolder = false }
+            )
+            Column(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(horizontal = 18.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(Color(0xCC1C1C1E))
+                    .border(1.dp, Color(0x66FFFFFF), RoundedCornerShape(24.dp))
+                    .padding(vertical = 14.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Utilities",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = IOS4FontFamily
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Column {
+                    folderApps.chunked(3).forEach { rowApps ->
+                        Row(horizontalArrangement = Arrangement.Center) {
+                            rowApps.forEach { app ->
+                                IOS4AppIcon(
+                                    app = app,
+                                    size = 54.dp,
+                                    showLabel = true,
+                                    showShadow = false,
+                                    onClick = {
+                                        openFolder = false
+                                        onAppOpen(app)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

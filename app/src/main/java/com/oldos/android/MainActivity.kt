@@ -206,91 +206,47 @@ class MainActivity : ComponentActivity() {
                                             }
                                                 OSState.APP -> {
                                                 val app = currentOpenedApp
-                                                if (app != null && app.id == "clock") {
-                                                    ClockScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null && app.id == "notes") {
-                                                    NotesScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null && app.id == "weather") {
-                                                    WeatherScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null && app.id == "contacts") {
-                                                    ContactsScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null && app.id == "photos") {
-                                                    PhotosScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null && app.id == "ipod") {
-                                                    IPodScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null && app.id == "safari") {
-                                                    SafariScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null && app.id == "calculator") {
-                                                    CalculatorScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null && app.id == "settings") {
-                                                    SettingsScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null && app.id == "messages") {
-                                                    MessagesScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null && app.id == "phone") {
-                                                    PhoneScreen(
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
-                                                } else if (app != null) {
-                                                    AppPlaceholderScreen(
-                                                        app = app,
-                                                        onHomeClick = {
-                                                            currentOpenedApp = null
-                                                            osState = OSState.HOME
-                                                        }
-                                                    )
+                                                if (app != null) {
+                                                    val onHomeClick = {
+                                                        currentOpenedApp = null
+                                                        osState = OSState.HOME
+                                                    }
+                                                    when (app.id) {
+                                                        "phone" -> PhoneScreen(onHomeClick = onHomeClick)
+                                                        "messages" -> MessagesScreen(onHomeClick = onHomeClick)
+                                                        "mail" -> MailScreen(onHomeClick = onHomeClick)
+                                                        "safari" -> SafariScreen(onHomeClick = onHomeClick)
+                                                        "ipod", "music" -> IPodScreen(onHomeClick = onHomeClick)
+                                                        "settings" -> SettingsScreen(onHomeClick = onHomeClick)
+                                                        "calculator" -> CalculatorScreen(onHomeClick = onHomeClick)
+                                                        "clock" -> ClockScreen(onHomeClick = onHomeClick)
+                                                        "notes" -> NotesScreen(onHomeClick = onHomeClick)
+                                                        "weather" -> WeatherScreen(onHomeClick = onHomeClick)
+                                                        "contacts" -> ContactsScreen(onHomeClick = onHomeClick)
+                                                        "photos" -> PhotosScreen(onHomeClick = onHomeClick)
+                                                        "camera" -> CameraScreen(onHomeClick = onHomeClick)
+                                                        "voicememos" -> VoiceMemosScreen(onHomeClick = onHomeClick)
+                                                        "videos" -> VideosScreen(onHomeClick = onHomeClick)
+                                                        "compass" -> CompassScreen(onHomeClick = onHomeClick)
+                                                        "stocks" -> StocksScreen(onHomeClick = onHomeClick)
+                                                        "youtube" -> WebAppScreen(
+                                                            title = "YouTube",
+                                                            startUrl = "https://m.youtube.com/",
+                                                            onHomeClick = onHomeClick
+                                                        )
+                                                        "maps" -> WebAppScreen(
+                                                            title = "Maps",
+                                                            startUrl = "https://www.openstreetmap.org/",
+                                                            onHomeClick = onHomeClick
+                                                        )
+                                                        "itunes" -> ITunesScreen(onHomeClick = onHomeClick)
+                                                        "appstore" -> AppStoreScreen(onHomeClick = onHomeClick)
+                                                        "gamecenter" -> GameCenterScreen(onHomeClick = onHomeClick)
+                                                        "facetime" -> FaceTimeScreen(onHomeClick = onHomeClick)
+                                                        "nike" -> NikeScreen(onHomeClick = onHomeClick)
+                                                        "cydia" -> CydiaScreen(onHomeClick = onHomeClick)
+                                                        else -> AppPlaceholderScreen(app = app, onHomeClick = onHomeClick)
+                                                    }
                                                 }
                                             }
                                         }

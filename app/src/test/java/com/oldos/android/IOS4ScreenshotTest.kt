@@ -183,6 +183,70 @@ class IOS4ScreenshotTest {
     }
 
     @Test
+    fun camera() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.CameraScreen(onHomeClick = {}) }
+        }
+        capture("12_camera")
+    }
+
+    @Test
+    fun voiceMemos() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.VoiceMemosScreen(onHomeClick = {}) }
+        }
+        capture("13_voicememos")
+    }
+
+    @Test
+    fun stocks() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.StocksScreen(onHomeClick = {}) }
+        }
+        capture("14_stocks")
+    }
+
+    @Test
+    fun mail() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.MailScreen(onHomeClick = {}) }
+        }
+        capture("15_mail")
+    }
+
+    @Test
+    fun itunes() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.ITunesScreen(onHomeClick = {}) }
+        }
+        capture("16_itunes")
+    }
+
+    @Test
+    fun gamecenter() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.GameCenterScreen(onHomeClick = {}) }
+        }
+        capture("17_gamecenter")
+    }
+
+    @Test
+    fun compass() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.CompassScreen(onHomeClick = {}) }
+        }
+        capture("18_compass")
+    }
+
+    @Test
+    fun cydia() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.CydiaScreen(onHomeClick = {}) }
+        }
+        capture("19_cydia")
+    }
+
+    @Test
     fun placeholder() {
         composeRule.setContent {
             OldOSTheme {
