@@ -1,21 +1,23 @@
 package com.oldos.android.ui.screens
 
-import com.oldos.android.ui.components.ios4PinstripeBackground
-import com.oldos.android.ui.components.rememberIOS4PinstripeBrush
-import com.oldos.android.ui.components.IOS4StatusBarVariant
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.oldos.android.R
 import com.oldos.android.model.SettingsManager
 import com.oldos.android.ui.components.*
+import com.oldos.android.ui.components.ios4PinstripeBackground
+import com.oldos.android.ui.components.rememberIOS4PinstripeBrush
+import com.oldos.android.ui.components.IOS4StatusBarVariant
 
 @Composable
 fun SettingsScreen(
@@ -23,12 +25,16 @@ fun SettingsScreen(
     modifier: Modifier = Modifier
 ) {
     var subScreen by remember { mutableStateOf("home") }
+    var appSettingsTarget by remember { mutableStateOf<Pair<String, Int>?>(null) }
+
+    val homeScreens = setOf("home")
 
     // Intercept back button to navigate backwards in Settings before leaving app
-    BackHandler(enabled = subScreen != "home") {
-        when (subScreen) {
-            "about" -> subScreen = "general"
-            else -> subScreen = "home"
+    BackHandler(enabled = subScreen !in homeScreens) {
+        subScreen = when (subScreen) {
+            "about" -> "general"
+            "network", "bluetooth", "autolock", "passcode", "datetime", "keyboard" -> "general"
+            else -> "home"
         }
     }
 
@@ -48,8 +54,11 @@ fun SettingsScreen(
         when (currentSubScreen) {
             "home" -> {
                 SettingsHomeScreen(
-                    onNavigateToWallpaper = { subScreen = "wallpaper" },
-                    onNavigateToGeneral = { subScreen = "general" },
+                    onNavigate = { subScreen = it },
+                    onOpenAppSettings = { target ->
+                        appSettingsTarget = target
+                        subScreen = "app"
+                    },
                     onHomeClick = onHomeClick
                 )
             }
@@ -60,7 +69,7 @@ fun SettingsScreen(
             }
             "general" -> {
                 GeneralSettingsScreen(
-                    onNavigateToAbout = { subScreen = "about" },
+                    onNavigate = { subScreen = it },
                     onBack = { subScreen = "home" }
                 )
             }
@@ -69,14 +78,35 @@ fun SettingsScreen(
                     onBack = { subScreen = "general" }
                 )
             }
+            "sounds" -> SoundsSettingsScreen(onBack = { subScreen = "home" })
+            "brightness" -> BrightnessSettingsScreen(onBack = { subScreen = "home" })
+            "notifications" -> NotificationsSettingsScreen(onBack = { subScreen = "home" })
+            "location" -> LocationSettingsScreen(onBack = { subScreen = "home" })
+            "carrier" -> CarrierSettingsScreen(onBack = { subScreen = "home" })
+            "network" -> NetworkSettingsScreen(onBack = { subScreen = "general" })
+            "bluetooth" -> BluetoothSettingsScreen(onBack = { subScreen = "general" })
+            "autolock" -> AutoLockSettingsScreen(onBack = { subScreen = "general" })
+            "passcode" -> PasscodeSettingsScreen(onBack = { subScreen = "general" })
+            "datetime" -> DateTimeSettingsScreen(onBack = { subScreen = "general" })
+            "keyboard" -> KeyboardSettingsScreen(onBack = { subScreen = "general" })
+            "app" -> {
+                val target = appSettingsTarget
+                if (target != null) {
+                    AppSettingsScreen(
+                        appName = target.first,
+                        appIconRes = target.second,
+                        onBack = { subScreen = "home" }
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
 private fun SettingsHomeScreen(
-    onNavigateToWallpaper: () -> Unit,
-    onNavigateToGeneral: () -> Unit,
+    onNavigate: (String) -> Unit,
+    onOpenAppSettings: (Pair<String, Int>) -> Unit,
     onHomeClick: () -> Unit
 ) {
     Column(
@@ -124,15 +154,15 @@ private fun SettingsHomeScreen(
                     title = "Notifications",
                     iconRes = R.drawable.set_notifications,
                     showChevron = true,
-                    onClick = {}
+                    onClick = { onNavigate("notifications") }
                 )
                 IOS4RowDivider()
                 IOS4RowItem(
                     title = "Location Services",
                     iconRes = R.drawable.set_location,
-                    detailText = "On",
+                    detailText = if (SettingsManager.isLocationEnabled) "On" else "Off",
                     showChevron = true,
-                    onClick = {}
+                    onClick = { onNavigate("location") }
                 )
                 IOS4RowDivider()
                 IOS4RowItem(
@@ -140,7 +170,7 @@ private fun SettingsHomeScreen(
                     iconRes = R.drawable.set_carrier,
                     detailText = SettingsManager.carrierName,
                     showChevron = true,
-                    onClick = {}
+                    onClick = { onNavigate("carrier") }
                 )
             }
 
@@ -152,21 +182,21 @@ private fun SettingsHomeScreen(
                     title = "Sounds",
                     iconRes = R.drawable.set_sound,
                     showChevron = true,
-                    onClick = {}
+                    onClick = { onNavigate("sounds") }
                 )
                 IOS4RowDivider()
                 IOS4RowItem(
                     title = "Brightness",
                     iconRes = R.drawable.set_brightness,
                     showChevron = true,
-                    onClick = {}
+                    onClick = { onNavigate("brightness") }
                 )
                 IOS4RowDivider()
                 IOS4RowItem(
                     title = "Wallpaper",
                     iconRes = R.drawable.set_wallpaper,
                     showChevron = true,
-                    onClick = onNavigateToWallpaper
+                    onClick = { onNavigate("wallpaper") }
                 )
             }
 
@@ -178,60 +208,39 @@ private fun SettingsHomeScreen(
                     title = "General",
                     iconRes = R.drawable.set_general,
                     showChevron = true,
-                    onClick = onNavigateToGeneral
+                    onClick = { onNavigate("general") }
                 )
                 IOS4RowDivider()
-                IOS4RowItem(
-                    title = "Mail, Contacts, Calendars",
-                    iconRes = R.drawable.ic_mail,
-                    showChevron = true,
-                    onClick = {}
-                )
+                AppSettingsRow("Mail, Contacts, Calendars", R.drawable.ic_mail, onOpenAppSettings)
                 IOS4RowDivider()
-                IOS4RowItem(
-                    title = "Phone",
-                    iconRes = R.drawable.ic_phone,
-                    showChevron = true,
-                    onClick = {}
-                )
+                AppSettingsRow("Phone", R.drawable.ic_phone, onOpenAppSettings)
                 IOS4RowDivider()
-                IOS4RowItem(
-                    title = "Safari",
-                    iconRes = R.drawable.ic_safari,
-                    showChevron = true,
-                    onClick = {}
-                )
+                AppSettingsRow("Safari", R.drawable.ic_safari, onOpenAppSettings)
                 IOS4RowDivider()
-                IOS4RowItem(
-                    title = "Messages",
-                    iconRes = R.drawable.ic_messages,
-                    showChevron = true,
-                    onClick = {}
-                )
+                AppSettingsRow("Messages", R.drawable.ic_messages, onOpenAppSettings)
                 IOS4RowDivider()
-                IOS4RowItem(
-                    title = "iPod",
-                    iconRes = R.drawable.ic_ipod,
-                    showChevron = true,
-                    onClick = {}
-                )
+                AppSettingsRow("iPod", R.drawable.ic_ipod, onOpenAppSettings)
                 IOS4RowDivider()
-                IOS4RowItem(
-                    title = "Photos",
-                    iconRes = R.drawable.ic_photos,
-                    showChevron = true,
-                    onClick = {}
-                )
+                AppSettingsRow("Photos", R.drawable.ic_photos, onOpenAppSettings)
                 IOS4RowDivider()
-                IOS4RowItem(
-                    title = "Notes",
-                    iconRes = R.drawable.ic_notes,
-                    showChevron = true,
-                    onClick = {}
-                )
+                AppSettingsRow("Notes", R.drawable.ic_notes, onOpenAppSettings)
             }
 
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
+}
+
+@Composable
+private fun AppSettingsRow(
+    title: String,
+    iconRes: Int,
+    onOpenAppSettings: (Pair<String, Int>) -> Unit
+) {
+    IOS4RowItem(
+        title = title,
+        iconRes = iconRes,
+        showChevron = true,
+        onClick = { onOpenAppSettings(title to iconRes) }
+    )
 }

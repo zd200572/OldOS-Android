@@ -109,6 +109,22 @@ class IOS4ScreenshotTest {
     }
 
     @Test
+    fun soundsSettings() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.SoundsSettingsScreen(onBack = {}) }
+        }
+        capture("03b_sounds")
+    }
+
+    @Test
+    fun brightnessSettings() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.BrightnessSettingsScreen(onBack = {}) }
+        }
+        capture("03c_brightness")
+    }
+
+    @Test
     fun calculator() {
         composeRule.setContent {
             OldOSTheme { CalculatorScreen(onHomeClick = {}) }

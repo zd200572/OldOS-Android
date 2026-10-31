@@ -2,6 +2,7 @@ package com.oldos.android.model
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,7 +16,19 @@ object SettingsManager {
     var isWifiEnabled by mutableStateOf(true)
     var isBluetoothEnabled by mutableStateOf(true)
     var isLockSoundEnabled by mutableStateOf(true)
-    var carrierName by mutableStateOf("中国移动")
+    var carrierName by mutableStateOf("AT&T")
+
+    // Settings sub-pages
+    var isKeyboardClicks by mutableStateOf(true)
+    var isSilentMode by mutableStateOf(false)
+    var isVibrateOnRing by mutableStateOf(true)
+    var isVibrateOnSilent by mutableStateOf(true)
+    var brightnessLevel by mutableFloatStateOf(0.75f)
+    var isAutoBrightness by mutableStateOf(false)
+    var isNotificationsEnabled by mutableStateOf(true)
+    var isLocationEnabled by mutableStateOf(true)
+    var is24HourTime by mutableStateOf(false)
+    var isAutoLock by mutableStateOf(true)
 
     val availableWallpapers = listOf(
         WallpaperItem(1, "Drops", R.drawable.wallpaper_1),
