@@ -32,6 +32,7 @@
 - **Lock Screen**: big thin clock, shimmering *slide to unlock*, real unlock sound.
 - **Multitasking Tray**: double-tap the virtual home button; media controls are wired to the real iPod playback engine.
 - **Jiggle Mode**: long-press the wallpaper to edit icons.
+- **Folders**: the Utilities folder opens as a dimmed, notched overlay — iOS 4 style.
 - **320 pt Design Canvas**: the whole OS renders on a virtual 320 pt-wide canvas scaled to your screen — tall phones simply get a longer home screen.
 
 ### 2. Built-in Apps
@@ -47,6 +48,14 @@
 | **Clock** | World Clock (live time zones), Stopwatch with laps, Timer, Alarms |
 | **Notes** | Yellow ruled-paper editor, persisted to local files |
 | **Calculator** | Working engine with glossy skeuomorphic keys |
+| **Camera** | Viewfinder grid + flash toggle; the shutter hands off to the system camera and shots land in the Photos camera roll |
+| **Videos** | Device movies from MediaStore with a full-screen player |
+| **Voice Memos** | Real recordings via MediaRecorder, tape list, in-place playback |
+| **Compass** | Live heading from the accelerometer + magnetometer, drawn as the iOS 4 dial |
+| **Stocks** | Era-flavored demo portfolio with Canvas sparkline charts |
+| **Mail** | Demo mailboxes in iOS 4 chrome; composing hands off to your real mail client |
+| **iTunes / Game Center / Cydia** | Museum storefronts of 2010 — demo data, lovingly dated |
+| **YouTube / Maps** | 2010-era mobile web apps inside iOS 4 WebView chrome |
 | **Settings** | Sounds, Brightness (real window brightness), Carrier selection, Wallpaper, General sub-pages — all persisted via DataStore |
 
 ### 3. Real Chrome, Hand-drawn
@@ -61,6 +70,10 @@
 | Clock (World) | Weather (live) | Notes | Contacts |
 | :---: | :---: | :---: | :---: |
 | <img src="screenshots/clock.png" width="220"/> | <img src="screenshots/weather.png" width="220"/> | <img src="screenshots/notes.png" width="220"/> | <img src="screenshots/contacts.png" width="220"/> |
+
+| Stocks | Mail | Voice Memos | Compass |
+| :---: | :---: | :---: | :---: |
+| <img src="screenshots/stocks.png" width="220"/> | <img src="screenshots/mail.png" width="220"/> | <img src="screenshots/voicememos.png" width="220"/> | <img src="screenshots/compass.png" width="220"/> |
 
 ---
 
@@ -111,6 +124,7 @@ To regenerate the headless screenshots:
 | `READ_CONTACTS` | Contacts app / Favorites |
 | `READ_MEDIA_IMAGES` (+ partial `READ_MEDIA_VISUAL_USER_SELECTED`) | Camera roll (Android 13+; legacy `READ_EXTERNAL_STORAGE` below) |
 | `READ_MEDIA_AUDIO` | Music library for iPod |
+| `READ_MEDIA_VIDEO` | Movie library for Videos |
 | `INTERNET` | Weather (Open-Meteo) and Safari |
 
 > [!NOTE]
