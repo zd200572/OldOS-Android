@@ -1,5 +1,6 @@
 package com.oldos.android.ui.components
 
+import com.oldos.android.ui.theme.IOS4FontFamily
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,6 +41,10 @@ import com.oldos.android.R
 import com.oldos.android.model.AppItem
 import com.oldos.android.ui.theme.IOS4BadgeBorder
 import com.oldos.android.ui.theme.IOS4BadgeRed
+import com.oldos.android.ui.theme.IOS4BadgeRedDark
+import com.oldos.android.ui.theme.IOS4IconLabelText
+import com.oldos.android.ui.theme.IOS4IconLabelShadow
+import com.oldos.android.ui.theme.IOS4IconLabelStyle
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -82,7 +87,7 @@ fun IOS4AppIcon(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .width(82.dp)
+            .width(80.dp)
             .rotate(rotation)
             .scale(scale)
             .pointerInput(isEditMode) {
@@ -143,7 +148,7 @@ fun IOS4AppIcon(
                         color = Color.White,
                         fontSize = 9.5.sp,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif,
+                        fontFamily = IOS4FontFamily,
                         maxLines = 1,
                         style = TextStyle(
                             platformStyle = PlatformTextStyle(includeFontPadding = false),
@@ -163,7 +168,7 @@ fun IOS4AppIcon(
                         color = Color(0xFF222222),
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif,
+                        fontFamily = IOS4FontFamily,
                         lineHeight = 32.sp,
                         style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
                     )
@@ -205,7 +210,7 @@ fun IOS4AppIcon(
                             brush = Brush.verticalGradient(
                                 colors = listOf(
                                     IOS4BadgeRed,
-                                    Color(0xFF9E0B0B)
+                                    IOS4BadgeRedDark
                                 )
                             ),
                             shape = CircleShape
@@ -217,7 +222,7 @@ fun IOS4AppIcon(
                         color = Color.White,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif,
+                        fontFamily = IOS4FontFamily,
                         textAlign = TextAlign.Center,
                         style = TextStyle(
                             platformStyle = PlatformTextStyle(
@@ -255,20 +260,17 @@ fun IOS4AppIcon(
             Spacer(modifier = Modifier.height(3.dp))
             Text(
                 text = app.title,
-                color = Color.White,
-                fontSize = 11.5.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = FontFamily.SansSerif,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center,
-                style = TextStyle(
+                color = IOS4IconLabelText,
+                style = IOS4IconLabelStyle.copy(
                     shadow = Shadow(
-                        color = Color.Black.copy(alpha = 0.95f),
+                        color = IOS4IconLabelShadow,
                         offset = Offset(0f, 1.5f),
                         blurRadius = 2.5f
                     )
-                )
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
             )
         }
     }

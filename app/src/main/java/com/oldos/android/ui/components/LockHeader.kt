@@ -1,5 +1,6 @@
 package com.oldos.android.ui.components
 
+import com.oldos.android.ui.theme.IOS4FontFamily
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -84,7 +85,7 @@ fun LockHeader(
                     color = Color.Black.copy(alpha = 0.6f),
                     fontSize = 62.sp,
                     fontWeight = FontWeight.Light,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = IOS4FontFamily,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.offset(y = 1.5.dp)
                 )
@@ -94,7 +95,7 @@ fun LockHeader(
                     color = Color.White,
                     fontSize = 62.sp,
                     fontWeight = FontWeight.Light,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = IOS4FontFamily,
                     textAlign = TextAlign.Center
                 )
             }
@@ -108,7 +109,7 @@ fun LockHeader(
                     color = Color.Black.copy(alpha = 0.5f),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Normal,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = IOS4FontFamily,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.offset(y = 1.dp)
                 )
@@ -117,7 +118,7 @@ fun LockHeader(
                     color = Color.White,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Normal,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = IOS4FontFamily,
                     textAlign = TextAlign.Center
                 )
             }

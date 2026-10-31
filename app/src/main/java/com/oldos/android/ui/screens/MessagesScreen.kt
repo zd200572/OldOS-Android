@@ -1,5 +1,7 @@
 package com.oldos.android.ui.screens
 
+import com.oldos.android.ui.components.IOS4StatusBarVariant
+import com.oldos.android.ui.theme.IOS4FontFamily
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -232,7 +234,7 @@ private fun ConversationListView(
     onRequestPermission: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
-        IOS4StatusBar()
+        IOS4StatusBar(variant = IOS4StatusBarVariant.Light)
 
         IOS4NavigationBar(
             title = "Messages",
@@ -278,12 +280,12 @@ private fun ConversationListView(
                     Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = Color(0xFF8E8E93), modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(6.dp))
                     Box(modifier = Modifier.weight(1f)) {
-                        if (searchQuery.isEmpty()) Text("Search", color = Color(0xFF8E8E93), fontSize = 14.sp, fontFamily = FontFamily.SansSerif)
+                        if (searchQuery.isEmpty()) Text("Search", color = Color(0xFF8E8E93), fontSize = 14.sp, fontFamily = IOS4FontFamily)
                         BasicTextField(
                             value = searchQuery,
                             onValueChange = onSearchQueryChange,
                             singleLine = true,
-                            textStyle = TextStyle(fontSize = 14.sp, color = Color.Black, fontFamily = FontFamily.SansSerif),
+                            textStyle = TextStyle(fontSize = 14.sp, color = Color.Black, fontFamily = IOS4FontFamily),
                             cursorBrush = SolidColor(Color(0xFF2E7DE5)),
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -303,7 +305,7 @@ private fun ConversationListView(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("需要短信读取权限才能显示真实对话", color = Color(0xFF8E8E93), fontSize = 15.sp, fontFamily = FontFamily.SansSerif, textAlign = TextAlign.Center)
+                Text("需要短信读取权限才能显示真实对话", color = Color(0xFF8E8E93), fontSize = 15.sp, fontFamily = IOS4FontFamily, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(20.dp))
                 Box(
                     modifier = Modifier
@@ -313,7 +315,7 @@ private fun ConversationListView(
                         .clickable { onRequestPermission() }
                         .padding(horizontal = 24.dp, vertical = 10.dp)
                 ) {
-                    Text("授予权限", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif)
+                    Text("授予权限", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold, fontFamily = IOS4FontFamily)
                 }
             }
             return@Column
@@ -328,7 +330,7 @@ private fun ConversationListView(
 
         if (filtered.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("无短信记录", color = Color(0xFF8E8E93), fontSize = 16.sp, fontFamily = FontFamily.SansSerif)
+                Text("无短信记录", color = Color(0xFF8E8E93), fontSize = 16.sp, fontFamily = IOS4FontFamily)
             }
             return@Column
         }
@@ -370,7 +372,7 @@ private fun ConversationListView(
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.Black,
-                                    fontFamily = FontFamily.SansSerif,
+                                    fontFamily = IOS4FontFamily,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.weight(1f, fill = false)
@@ -380,7 +382,7 @@ private fun ConversationListView(
                                     text = state.thread.dateDisplay,
                                     fontSize = 13.5.sp,
                                     color = Color(0xFF265696),
-                                    fontFamily = FontFamily.SansSerif
+                                    fontFamily = IOS4FontFamily
                                 )
                             }
                             Spacer(modifier = Modifier.height(2.dp))
@@ -388,7 +390,7 @@ private fun ConversationListView(
                                 text = lastMsg,
                                 fontSize = 14.sp,
                                 color = Color(0xFF737373),
-                                fontFamily = FontFamily.SansSerif,
+                                fontFamily = IOS4FontFamily,
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
                                 lineHeight = 17.sp
@@ -430,7 +432,7 @@ private fun ChatConversationView(
     }
 
     Column(modifier = Modifier.fillMaxSize().background(Color(0xFFDCE2E8))) {
-        IOS4StatusBar()
+        IOS4StatusBar(variant = IOS4StatusBarVariant.Light)
 
         IOS4NavigationBar(
             title = threadState.thread.contactName,
@@ -461,7 +463,7 @@ private fun ChatConversationView(
                                 fontSize = 11.5.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = Color(0xFF4C525B),
-                                fontFamily = FontFamily.SansSerif
+                                fontFamily = IOS4FontFamily
                             )
                         }
                     }
@@ -506,12 +508,12 @@ private fun ChatConversationView(
                         .padding(horizontal = 12.dp),
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    if (inputText.isEmpty()) Text("Text Message", color = Color(0xFF8E8E93), fontSize = 14.sp, fontFamily = FontFamily.SansSerif)
+                    if (inputText.isEmpty()) Text("Text Message", color = Color(0xFF8E8E93), fontSize = 14.sp, fontFamily = IOS4FontFamily)
                     BasicTextField(
                         value = inputText,
                         onValueChange = { inputText = it },
                         singleLine = true,
-                        textStyle = TextStyle(fontSize = 14.sp, color = Color.Black, fontFamily = FontFamily.SansSerif),
+                        textStyle = TextStyle(fontSize = 14.sp, color = Color.Black, fontFamily = IOS4FontFamily),
                         cursorBrush = SolidColor(Color(0xFF2E7DE5)),
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -548,7 +550,7 @@ private fun ChatConversationView(
                         color = if (hasText) Color.White else Color.White.copy(alpha = 0.55f),
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif,
+                        fontFamily = IOS4FontFamily,
                         style = TextStyle(shadow = if (hasText) Shadow(color = Color.Black.copy(alpha = 0.4f), offset = Offset(0f, -1f)) else null)
                     )
                 }
@@ -630,7 +632,7 @@ private fun ChatBubbleItem(message: ChatMessage) {
                 text = message.text,
                 color = if (isFromMe) Color.White else Color(0xFF1C1C1E),
                 fontSize = 15.sp,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = IOS4FontFamily,
                 fontWeight = FontWeight.Medium,
                 lineHeight = 19.sp,
                 style = TextStyle(

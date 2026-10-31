@@ -1,5 +1,6 @@
 package com.oldos.android.ui.components
 
+import com.oldos.android.ui.theme.IOS4FontFamily
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -130,7 +131,7 @@ fun SlideToUnlockBar(
                     brush = shimmerBrush,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Normal,
-                    fontFamily = FontFamily.SansSerif
+                    fontFamily = IOS4FontFamily
                 ),
                 modifier = Modifier
                     .padding(start = 50.dp)

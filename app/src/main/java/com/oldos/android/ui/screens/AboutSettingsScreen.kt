@@ -1,5 +1,8 @@
 package com.oldos.android.ui.screens
 
+import com.oldos.android.ui.components.ios4PinstripeBackground
+import com.oldos.android.ui.components.rememberIOS4PinstripeBrush
+import com.oldos.android.ui.components.IOS4StatusBarVariant
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,9 +21,9 @@ fun AboutSettingsScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFC5CCD4))
+            .ios4PinstripeBackground(rememberIOS4PinstripeBrush())
     ) {
-        IOS4StatusBar()
+        IOS4StatusBar(variant = IOS4StatusBarVariant.Light)
         IOS4NavigationBar(
             title = "About",
             leftButtonText = "General",

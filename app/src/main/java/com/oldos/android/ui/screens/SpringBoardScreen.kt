@@ -188,7 +188,7 @@ private fun AppIconGrid(
                 for (app in row) {
                     IOS4AppIcon(
                         app = app,
-                        size = 64.dp,
+                        size = 60.dp,
                         showLabel = true,
                         showShadow = true,
                         isEditMode = isEditMode,
@@ -198,7 +198,7 @@ private fun AppIconGrid(
                 }
                 if (row.size < 4) {
                     repeat(4 - row.size) {
-                        Spacer(modifier = Modifier.width(82.dp))
+                        Spacer(modifier = Modifier.width(80.dp))
                     }
                 }
             }

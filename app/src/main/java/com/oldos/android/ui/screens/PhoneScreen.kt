@@ -1,5 +1,7 @@
 package com.oldos.android.ui.screens
 
+import com.oldos.android.ui.components.IOS4StatusBarVariant
+import com.oldos.android.ui.theme.IOS4FontFamily
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -198,7 +200,7 @@ fun PhoneScreen(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        IOS4StatusBar()
+        IOS4StatusBar(variant = IOS4StatusBarVariant.Light)
 
         Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
             when (currentTab) {
@@ -289,7 +291,7 @@ private fun KeypadTabView(
                 color = Color.White,
                 fontSize = if (phoneNumber.length > 12) 26.sp else 34.sp,
                 fontWeight = FontWeight.Normal,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = IOS4FontFamily,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
@@ -309,7 +311,9 @@ private fun KeypadTabView(
 
         Column(
             modifier = Modifier.weight(1f).fillMaxWidth().padding(horizontal = 1.dp),
-            verticalArrangement = Arrangement.SpaceEvenly
+            // Compact keypad block centered vertically, fixed gaps — iOS 4 keeps
+            // the rows tight instead of stretching them across tall screens
+            verticalArrangement = Arrangement.spacedBy(24.dp, alignment = Alignment.CenterVertically)
         ) {
             for (row in keys) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -375,7 +379,7 @@ private fun KeypadTabView(
                             color = Color.White,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily.SansSerif,
+                            fontFamily = IOS4FontFamily,
                             style = TextStyle(shadow = Shadow(color = Color.Black.copy(alpha = 0.6f), offset = Offset(0f, -1f)))
                         )
                     }
@@ -432,7 +436,7 @@ private fun KeypadButton(digit: String, subLetters: String, onPress: () -> Unit,
                     color = Color.White,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = IOS4FontFamily,
                     style = TextStyle(shadow = Shadow(color = Color.Black.copy(alpha = 0.5f), offset = Offset(0f, -1f)))
                 )
             }
@@ -442,7 +446,7 @@ private fun KeypadButton(digit: String, subLetters: String, onPress: () -> Unit,
                     color = Color(0xFFAEC0D6),
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = IOS4FontFamily,
                     style = TextStyle(shadow = Shadow(color = Color.Black.copy(alpha = 0.6f), offset = Offset(0f, -0.5f)))
                 )
             }
@@ -474,7 +478,7 @@ private fun RecentsTabView(
 
         if (recents.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("无通话记录", color = Color(0xFF8E8E93), fontSize = 16.sp, fontFamily = FontFamily.SansSerif)
+                Text("无通话记录", color = Color(0xFF8E8E93), fontSize = 16.sp, fontFamily = IOS4FontFamily)
             }
             return@Column
         }
@@ -504,7 +508,7 @@ private fun RecentCallRow(call: RealCallEntry, onCallContact: (String) -> Unit) 
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = if (call.isMissed) Color(0xFFD32F2F) else Color.Black,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = IOS4FontFamily,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -513,13 +517,13 @@ private fun RecentCallRow(call: RealCallEntry, onCallContact: (String) -> Unit) 
                     text = call.number,
                     fontSize = 13.sp,
                     color = Color(0xFF757575),
-                    fontFamily = FontFamily.SansSerif
+                    fontFamily = IOS4FontFamily
                 )
             }
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = call.timeDisplay, fontSize = 13.sp, color = Color(0xFF265696), fontFamily = FontFamily.SansSerif)
+            Text(text = call.timeDisplay, fontSize = 13.sp, color = Color(0xFF265696), fontFamily = IOS4FontFamily)
             Spacer(modifier = Modifier.width(8.dp))
             Icon(imageVector = Icons.Default.Phone, contentDescription = "Call", tint = Color(0xFF45B411), modifier = Modifier.size(18.dp))
         }
@@ -539,7 +543,7 @@ private fun FavoritesTabView(favorites: List<RealContact>, onCallContact: (Strin
 
         if (display.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("无联系人", color = Color(0xFF8E8E93), fontSize = 16.sp, fontFamily = FontFamily.SansSerif)
+                Text("无联系人", color = Color(0xFF8E8E93), fontSize = 16.sp, fontFamily = IOS4FontFamily)
             }
             return@Column
         }
@@ -555,8 +559,8 @@ private fun FavoritesTabView(favorites: List<RealContact>, onCallContact: (Strin
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = contact.name, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = FontFamily.SansSerif, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        Text(text = "${contact.numberType}  ${contact.number}", fontSize = 13.sp, color = Color(0xFF757575), fontFamily = FontFamily.SansSerif)
+                        Text(text = contact.name, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = IOS4FontFamily, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(text = "${contact.numberType}  ${contact.number}", fontSize = 13.sp, color = Color(0xFF757575), fontFamily = IOS4FontFamily)
                     }
                     Icon(imageVector = Icons.Default.Star, contentDescription = "Favorite", tint = Color(0xFF1E64D8), modifier = Modifier.size(20.dp))
                 }
@@ -587,7 +591,7 @@ private fun ContactsTabView(
 
         if (contacts.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("无联系人", color = Color(0xFF8E8E93), fontSize = 16.sp, fontFamily = FontFamily.SansSerif)
+                Text("无联系人", color = Color(0xFF8E8E93), fontSize = 16.sp, fontFamily = IOS4FontFamily)
             }
             return@Column
         }
@@ -603,8 +607,8 @@ private fun ContactsTabView(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = c.name, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = FontFamily.SansSerif, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        Text(text = c.number, fontSize = 13.sp, color = Color(0xFF757575), fontFamily = FontFamily.SansSerif)
+                        Text(text = c.name, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = IOS4FontFamily, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(text = c.number, fontSize = 13.sp, color = Color(0xFF757575), fontFamily = IOS4FontFamily)
                     }
                     Icon(imageVector = Icons.Default.Phone, contentDescription = "Call", tint = Color(0xFF45B411), modifier = Modifier.size(18.dp))
                 }
@@ -635,9 +639,9 @@ private fun VoicemailTabView(onCallVoicemail: () -> Unit) {
                 modifier = Modifier.size(64.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Call Voicemail", fontSize = 17.sp, color = Color(0xFF265696), fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.SansSerif)
+            Text("Call Voicemail", fontSize = 17.sp, color = Color(0xFF265696), fontWeight = FontWeight.SemiBold, fontFamily = IOS4FontFamily)
             Spacer(modifier = Modifier.height(8.dp))
-            Text("Tap to call your voicemail inbox", fontSize = 13.sp, color = Color(0xFF8E8E93), fontFamily = FontFamily.SansSerif)
+            Text("Tap to call your voicemail inbox", fontSize = 13.sp, color = Color(0xFF8E8E93), fontFamily = IOS4FontFamily)
             Spacer(modifier = Modifier.height(24.dp))
             Box(
                 modifier = Modifier
@@ -650,7 +654,7 @@ private fun VoicemailTabView(onCallVoicemail: () -> Unit) {
                     .padding(horizontal = 32.dp, vertical = 12.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Call Now", color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif)
+                Text("Call Now", color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold, fontFamily = IOS4FontFamily)
             }
         }
     }
@@ -667,7 +671,7 @@ private fun PermissionPromptView(message: String, onRequest: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(message, color = Color(0xFF8E8E93), fontSize = 15.sp, fontFamily = FontFamily.SansSerif, textAlign = TextAlign.Center)
+        Text(message, color = Color(0xFF8E8E93), fontSize = 15.sp, fontFamily = IOS4FontFamily, textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(20.dp))
         Box(
             modifier = Modifier
@@ -677,7 +681,7 @@ private fun PermissionPromptView(message: String, onRequest: () -> Unit) {
                 .clickable { onRequest() }
                 .padding(horizontal = 24.dp, vertical = 10.dp)
         ) {
-            Text("授予权限", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif)
+            Text("授予权限", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold, fontFamily = IOS4FontFamily)
         }
     }
 }
@@ -736,7 +740,7 @@ fun IOS4PhoneTabBar(currentTab: PhoneTab, onTabSelected: (PhoneTab) -> Unit) {
                             text = iconPair.second,
                             color = if (isSelected) Color(0xFFFFFFFF) else Color(0xFF8E8E93),
                             fontSize = 10.sp,
-                            fontFamily = FontFamily.SansSerif,
+                            fontFamily = IOS4FontFamily,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                         )
                     }

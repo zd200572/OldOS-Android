@@ -1,5 +1,9 @@
 package com.oldos.android.ui.screens
 
+import com.oldos.android.ui.components.ios4PinstripeBackground
+import com.oldos.android.ui.components.rememberIOS4PinstripeBrush
+import com.oldos.android.ui.components.IOS4StatusBarVariant
+import com.oldos.android.ui.theme.IOS4FontFamily
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -29,9 +33,9 @@ fun AppPlaceholderScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFC5CCD4)) // Classic iOS 4 striped gray-blue background
+            .ios4PinstripeBackground(rememberIOS4PinstripeBrush()) // Classic iOS 4 striped gray-blue background
     ) {
-        IOS4StatusBar()
+        IOS4StatusBar(variant = IOS4StatusBarVariant.Light)
         IOS4NavigationBar(
             title = app.title,
             leftButtonText = "Home",
@@ -62,14 +66,14 @@ fun AppPlaceholderScreen(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF333333),
-                    fontFamily = FontFamily.SansSerif
+                    fontFamily = IOS4FontFamily
                 )
 
                 Text(
                     text = "Module in development for OldOS Android.",
                     fontSize = 14.sp,
                     color = Color(0xFF666666),
-                    fontFamily = FontFamily.SansSerif
+                    fontFamily = IOS4FontFamily
                 )
             }
         }

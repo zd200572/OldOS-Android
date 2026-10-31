@@ -1,5 +1,6 @@
 package com.oldos.android.ui.components
 
+import com.oldos.android.ui.theme.IOS4FontFamily
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -224,7 +225,7 @@ private fun SwitcherAppItem(
             color = Color.White,
             fontSize = 11.sp,
             fontWeight = FontWeight.SemiBold,
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = IOS4FontFamily,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center

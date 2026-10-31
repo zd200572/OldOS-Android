@@ -1,5 +1,11 @@
 package com.oldos.android.ui.components
 
+import com.oldos.android.ui.theme.IOS4FontFamily
+import com.oldos.android.ui.theme.IOS4SwitchOffGradient
+import com.oldos.android.ui.theme.IOS4SwitchOnGradient
+import com.oldos.android.ui.theme.IOS4SwitchOnOrangeGradient
+import com.oldos.android.ui.theme.IOS4SwitchThumbGradient
+import com.oldos.android.ui.theme.IOS4SwitchThumbStroke
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -29,9 +35,10 @@ import androidx.compose.ui.unit.sp
 fun IOS4Switch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    orange: Boolean = false
 ) {
-    val trackWidth = 76.dp
+    val trackWidth = 79.dp
     val trackHeight = 27.dp
     val thumbSize = 27.dp
 
@@ -49,25 +56,16 @@ fun IOS4Switch(
             .size(width = trackWidth, height = trackHeight)
             .shadow(elevation = 1.dp, shape = RoundedCornerShape(14.dp))
             .clip(RoundedCornerShape(14.dp))
-            .border(width = 0.5.dp, color = Color(0xFF9E9E9E), shape = RoundedCornerShape(14.dp))
+            .border(width = 0.5.dp, color = IOS4SwitchThumbStroke, shape = RoundedCornerShape(14.dp))
             .background(
-                brush = if (checked) {
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFF1E63BD),
-                            Color(0xFF3B8BEA),
-                            Color(0xFF559EF5)
-                        )
-                    )
-                } else {
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFFC0C0C0),
-                            Color(0xFFE4E4E4),
-                            Color(0xFFECECEC)
-                        )
-                    )
-                }
+                // Inset shadow well beneath the track (approx)
+                brush = Brush.verticalGradient(
+                    colors = if (checked) {
+                        if (orange) IOS4SwitchOnOrangeGradient else IOS4SwitchOnGradient
+                    } else {
+                        IOS4SwitchOffGradient
+                    }
+                )
             )
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -84,7 +82,7 @@ fun IOS4Switch(
                 color = Color.White,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = IOS4FontFamily,
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = 11.dp)
@@ -96,14 +94,14 @@ fun IOS4Switch(
                 color = Color(0xFF6E6E6E),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = IOS4FontFamily,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .padding(end = 9.dp)
             )
         }
 
-        // Sliding Metallic Silver Thumb
+        // Sliding metallic thumb
         Box(
             modifier = Modifier
                 .offset(x = thumbOffset)
@@ -112,14 +110,15 @@ fun IOS4Switch(
                 .clip(CircleShape)
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFFFFFFFF),
-                            Color(0xFFE2E2E2),
-                            Color(0xFFC4C4C4)
+                        colorStops = arrayOf(
+                            0f to IOS4SwitchThumbGradient[0],
+                            0.48f to IOS4SwitchThumbGradient[1],
+                            0.52f to IOS4SwitchThumbGradient[2],
+                            1f to IOS4SwitchThumbGradient[3]
                         )
                     )
                 )
-                .border(width = 0.5.dp, color = Color(0xFFAFAFAF), shape = CircleShape)
+                .border(width = 0.5.dp, color = IOS4SwitchThumbStroke, shape = CircleShape)
         ) {
             // High gloss shine on top
             Box(

@@ -1,8 +1,17 @@
 package com.oldos.android.ui.screens
 
+import com.oldos.android.ui.components.IOS4StatusBarVariant
+import com.oldos.android.ui.theme.IOS4CalcDigitGradient
+import com.oldos.android.ui.theme.IOS4CalcFunctionGradient
+import com.oldos.android.ui.theme.IOS4CalcLcdBackground
+import com.oldos.android.ui.theme.IOS4CalcOperatorGradient
+import com.oldos.android.ui.theme.IOS4ChromePressedOverlay
+import com.oldos.android.ui.theme.IOS4FontFamily
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
@@ -10,6 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -90,7 +100,7 @@ fun CalculatorScreen(
             .fillMaxSize()
             .background(Color(0xFF1E1E1E))
     ) {
-        IOS4StatusBar()
+        IOS4StatusBar(variant = IOS4StatusBarVariant.Light)
         IOS4NavigationBar(
             title = "Calculator",
             leftButtonText = "Home",
@@ -102,16 +112,30 @@ fun CalculatorScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1.2f)
-                .background(Color(0xFF141414))
+                .drawBehind {
+                    // Glassy dark LCD: subtle vertical falloff + top sheen
+                    drawRect(
+                        brush = Brush.verticalGradient(
+                            listOf(Color(0xFF050505), IOS4CalcLcdBackground, Color(0xFF232326))
+                        )
+                    )
+                    drawRect(
+                        brush = Brush.verticalGradient(
+                            listOf(Color.White.copy(alpha = 0.06f), Color.Transparent),
+                            startY = 0f,
+                            endY = size.height * 0.12f
+                        )
+                    )
+                }
                 .padding(horizontal = 20.dp, vertical = 16.dp),
-            contentAlignment = Alignment.BottomEnd
+            contentAlignment = Alignment.TopEnd
         ) {
             Text(
                 text = displayValue,
                 color = Color.White,
                 fontSize = 56.sp,
                 fontWeight = FontWeight.Light,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = IOS4FontFamily,
                 textAlign = TextAlign.End,
                 maxLines = 1
             )
@@ -179,28 +203,35 @@ private fun CalcButton(
     type: KeyType,
     onClick: () -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
     val isZero = (type == KeyType.ZERO)
     val width = if (isZero) 152.dp else 70.dp
     val height = 66.dp
 
-    val (bgTop, bgBottom, textColor) = when (type) {
-        KeyType.OPERATOR -> Triple(Color(0xFFF7941D), Color(0xFFD47008), Color.White)
-        KeyType.FUNCTION -> Triple(Color(0xFFA5A5A5), Color(0xFF7E7E7E), Color.Black)
-        else -> Triple(Color(0xFF4C4C4C), Color(0xFF2C2C2C), Color.White)
+    val gradient = when (type) {
+        KeyType.OPERATOR -> IOS4CalcOperatorGradient
+        KeyType.FUNCTION -> IOS4CalcFunctionGradient
+        else -> IOS4CalcDigitGradient
     }
+    val textColor = if (type == KeyType.FUNCTION) Color.Black else Color.White
 
     Box(
         modifier = Modifier
             .size(width = width, height = height)
             .shadow(2.dp, CircleShape)
             .clip(CircleShape)
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(bgTop, bgBottom)
-                )
+            .background(brush = Brush.verticalGradient(gradient))
+            .then(
+                if (isPressed) Modifier.background(IOS4ChromePressedOverlay)
+                else Modifier
             )
             .border(0.5.dp, Color.Black.copy(alpha = 0.5f), CircleShape)
-            .clickable { onClick() },
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) { onClick() },
         contentAlignment = Alignment.Center
     ) {
         // Skeuomorphic glossy shine on top half of button
@@ -224,7 +255,7 @@ private fun CalcButton(
             color = textColor,
             fontSize = 26.sp,
             fontWeight = FontWeight.SemiBold,
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = IOS4FontFamily,
             textAlign = TextAlign.Center
         )
     }

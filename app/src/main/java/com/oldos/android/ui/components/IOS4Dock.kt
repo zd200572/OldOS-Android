@@ -52,12 +52,12 @@ fun IOS4Dock(
             dockApps.take(4).forEach { app ->
                 Box(
                     contentAlignment = Alignment.TopCenter,
-                    modifier = Modifier.width(82.dp)
+                    modifier = Modifier.width(80.dp)
                 ) {
                     // Authentic subtle reflection on the 3D glass shelf
                     Box(
                         modifier = Modifier
-                            .offset(y = 54.dp)
+                            .offset(y = 52.dp)
                             .height(22.dp)
                             .clipToBounds()
                             .scale(scaleX = 1f, scaleY = -0.55f)
@@ -65,7 +65,7 @@ fun IOS4Dock(
                     ) {
                         IOS4AppIcon(
                             app = app,
-                            size = 62.dp,
+                            size = 60.dp,
                             showLabel = false,
                             showShadow = false,
                             isEditMode = false
@@ -75,7 +75,7 @@ fun IOS4Dock(
                     // Main dock icon
                     IOS4AppIcon(
                         app = app,
-                        size = 62.dp,
+                        size = 60.dp,
                         showLabel = false,
                         showShadow = false,
                         isEditMode = isEditMode,
