@@ -231,6 +231,13 @@ class MainActivity : ComponentActivity() {
                                                             osState = OSState.HOME
                                                         }
                                                     )
+                                                } else if (app != null && app.id == "photos") {
+                                                    PhotosScreen(
+                                                        onHomeClick = {
+                                                            currentOpenedApp = null
+                                                            osState = OSState.HOME
+                                                        }
+                                                    )
                                                 } else if (app != null && app.id == "calculator") {
                                                     CalculatorScreen(
                                                         onHomeClick = {
