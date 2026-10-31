@@ -238,6 +238,13 @@ class MainActivity : ComponentActivity() {
                                                             osState = OSState.HOME
                                                         }
                                                     )
+                                                } else if (app != null && app.id == "ipod") {
+                                                    IPodScreen(
+                                                        onHomeClick = {
+                                                            currentOpenedApp = null
+                                                            osState = OSState.HOME
+                                                        }
+                                                    )
                                                 } else if (app != null && app.id == "calculator") {
                                                     CalculatorScreen(
                                                         onHomeClick = {
@@ -343,6 +350,7 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         SoundManager.release()
+        com.oldos.android.model.MusicPlayerManager.release()
     }
 
     private fun hideSystemUI() {

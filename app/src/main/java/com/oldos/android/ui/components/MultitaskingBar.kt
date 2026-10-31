@@ -35,14 +35,16 @@ import androidx.compose.ui.unit.sp
 import com.oldos.android.R
 import com.oldos.android.model.AppHistoryManager
 import com.oldos.android.model.AppItem
+import com.oldos.android.model.MusicPlayerManager
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun MultitaskingBar(
     onSelectApp: (AppItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     var isKillMode by remember { mutableStateOf(false) }
-    var isPlaying by remember { mutableStateOf(false) }
     var isRotationLocked by remember { mutableStateOf(false) }
 
     // Page 0: Media & Rotation Lock controls, Page 1: Recent apps
@@ -89,8 +91,8 @@ fun MultitaskingBar(
             if (page == 0) {
                 // Media Controls Page
                 SwitcherMediaControls(
-                    isPlaying = isPlaying,
-                    onTogglePlay = { isPlaying = !isPlaying },
+                    isPlaying = MusicPlayerManager.isPlaying,
+                    onTogglePlay = { MusicPlayerManager.togglePlayPause(context) },
                     isRotationLocked = isRotationLocked,
                     onToggleRotationLock = { isRotationLocked = !isRotationLocked },
                     onIpodClick = {
@@ -241,6 +243,8 @@ private fun SwitcherMediaControls(
     onToggleRotationLock: () -> Unit,
     onIpodClick: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -296,7 +300,7 @@ private fun SwitcherMediaControls(
                 contentDescription = "Previous",
                 modifier = Modifier
                     .size(34.dp)
-                    .clickable { /* Prev track */ }
+                    .clickable { MusicPlayerManager.previous(context) }
             )
 
             Image(
@@ -314,7 +318,7 @@ private fun SwitcherMediaControls(
                 contentDescription = "Next",
                 modifier = Modifier
                     .size(34.dp)
-                    .clickable { /* Next track */ }
+                    .clickable { MusicPlayerManager.next(context) }
             )
         }
 
