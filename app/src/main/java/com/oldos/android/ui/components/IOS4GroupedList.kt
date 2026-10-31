@@ -130,6 +130,7 @@ fun IOS4RowItem(
     iconRes: Int? = null,
     detailText: String? = null,
     showChevron: Boolean = false,
+    titleColor: Color = Color.Black,
     trailingContent: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
@@ -172,7 +173,7 @@ fun IOS4RowItem(
 
         Text(
             text = title,
-            color = titleColor,
+            color = if (isPressed) Color.White else titleColor,
             style = IOS4TableRowStyle,
             modifier = Modifier.weight(1f)
         )
