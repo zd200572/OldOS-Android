@@ -201,9 +201,37 @@ class MainActivity : ComponentActivity() {
                                                     onEditModeChange = { isSpringBoardEditMode = it }
                                                 )
                                             }
-                                            OSState.APP -> {
+                                                OSState.APP -> {
                                                 val app = currentOpenedApp
-                                                if (app != null && app.id == "calculator") {
+                                                if (app != null && app.id == "clock") {
+                                                    ClockScreen(
+                                                        onHomeClick = {
+                                                            currentOpenedApp = null
+                                                            osState = OSState.HOME
+                                                        }
+                                                    )
+                                                } else if (app != null && app.id == "notes") {
+                                                    NotesScreen(
+                                                        onHomeClick = {
+                                                            currentOpenedApp = null
+                                                            osState = OSState.HOME
+                                                        }
+                                                    )
+                                                } else if (app != null && app.id == "weather") {
+                                                    WeatherScreen(
+                                                        onHomeClick = {
+                                                            currentOpenedApp = null
+                                                            osState = OSState.HOME
+                                                        }
+                                                    )
+                                                } else if (app != null && app.id == "contacts") {
+                                                    ContactsScreen(
+                                                        onHomeClick = {
+                                                            currentOpenedApp = null
+                                                            osState = OSState.HOME
+                                                        }
+                                                    )
+                                                } else if (app != null && app.id == "calculator") {
                                                     CalculatorScreen(
                                                         onHomeClick = {
                                                             currentOpenedApp = null

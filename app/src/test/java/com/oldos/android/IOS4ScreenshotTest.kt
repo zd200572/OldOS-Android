@@ -125,6 +125,40 @@ class IOS4ScreenshotTest {
     }
 
     @Test
+    fun clock() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.ClockScreen(onHomeClick = {}) }
+        }
+        capture("07_clock")
+    }
+
+    @Test
+    fun notes() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.NotesScreen(onHomeClick = {}) }
+        }
+        capture("08_notes")
+    }
+
+    @Test
+    fun contacts() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.ContactsScreen(onHomeClick = {}) }
+        }
+        capture("09_contacts")
+    }
+
+    @Test
+    fun weather() {
+        composeRule.setContent {
+            OldOSTheme { com.oldos.android.ui.screens.WeatherScreen(onHomeClick = {}) }
+        }
+        composeRule.mainClock.advanceTimeBy(3000)
+        composeRule.waitForIdle()
+        capture("10_weather")
+    }
+
+    @Test
     fun calculator() {
         composeRule.setContent {
             OldOSTheme { CalculatorScreen(onHomeClick = {}) }
