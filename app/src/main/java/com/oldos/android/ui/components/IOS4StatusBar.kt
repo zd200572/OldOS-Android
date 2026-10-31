@@ -35,15 +35,22 @@ fun IOS4StatusBar(
     modifier: Modifier = Modifier,
     variant: IOS4StatusBarVariant = IOS4StatusBarVariant.Overlay,
     isLocked: Boolean = false,
-    carrierName: String = "AT&T",
-    batteryPercentage: Int = 100,
-    isCharging: Boolean = false
+    carrierName: String? = null,
+    batteryPercentage: Int? = null,
+    isCharging: Boolean? = null
 ) {
     var currentTime by remember { mutableStateOf("") }
+    val battery = rememberBatteryStatus()
+    val effectiveBattery = batteryPercentage ?: battery.percentage
+    val effectiveCharging = isCharging ?: battery.isCharging
+    val effectiveCarrier = rememberCarrierName(
+        fallback = com.oldos.android.model.SettingsManager.carrierName
+    )
+    val is24Hour = com.oldos.android.model.SettingsManager.is24HourTime
 
-    LaunchedEffect(isLocked) {
+    LaunchedEffect(isLocked, is24Hour) {
         if (!isLocked) {
-            val formatter = SimpleDateFormat("h:mm a", Locale.US)
+            val formatter = SimpleDateFormat(if (is24Hour) "HH:mm" else "h:mm a", Locale.US)
             while (true) {
                 currentTime = formatter.format(Date())
                 delay(1000)
@@ -129,7 +136,7 @@ fun IOS4StatusBar(
             IOS4SignalBars(level = 5, color = glyphColor)
 
             Text(
-                text = carrierName,
+                text = effectiveCarrier,
                 color = carrierColor,
                 style = IOS4StatusBarTextStyle
             )
@@ -155,14 +162,14 @@ fun IOS4StatusBar(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = "$batteryPercentage%",
+                text = "$effectiveBattery%",
                 color = glyphColor,
                 style = IOS4StatusBarAuxStyle
             )
 
             IOS4BatteryGlyph(
-                percentage = batteryPercentage,
-                isCharging = isCharging,
+                percentage = effectiveBattery,
+                isCharging = effectiveCharging,
                 color = glyphColor
             )
         }

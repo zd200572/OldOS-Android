@@ -1,14 +1,16 @@
 # OldOS for Android (iOS 4 Simulator)
 
 <p align="center">
-  <img src="screenshots/springboard_ios4.png" alt="SpringBoard" width="31%" />
-  <img src="screenshots/phone.png" alt="Phone Keypad" width="31%" />
-  <img src="screenshots/calculator.png" alt="Calculator" width="31%" />
+  <img src="screenshots/springboard_real_device.png" alt="Real device" width="23%" />
+  <img src="screenshots/lock.png" alt="Lock Screen" width="23%" />
+  <img src="screenshots/spotlight.png" alt="Spotlight" width="23%" />
+  <img src="screenshots/settings.png" alt="Settings" width="23%" />
 </p>
 
 <p align="center">
-  <b>A pixel-perfect, nostalgic recreation of iOS 4 on modern Android, built with Jetpack Compose.</b><br/>
-  Featuring authentic skeuomorphic textures, working Phone with real call history, Messages with real SMS conversations, and a physical-style virtual Home Button.
+  <b>A nostalgic recreation of iOS 4 on modern Android, built with Jetpack Compose.</b><br/>
+  Skeuomorphic gradients, linen textures, real SMS, real call log, real photos and music —
+  and a virtual home button with multitasking.
 </p>
 
 <p align="center">
@@ -22,122 +24,107 @@
 
 ---
 
-## 📸 Screenshots
-
-| SpringBoard (Home Screen) | Phone (Metallic Keypad) | Calculator (Classic LCD) |
-| :---: | :---: | :---: |
-| <img src="screenshots/springboard_ios4.png" width="280"/> | <img src="screenshots/phone.png" width="280"/> | <img src="screenshots/calculator.png" width="280"/> |
-
----
-
-## 📱 Highlights
-
-Remember iOS 4 in 2010? The rich glass dock with 3D reflection, linen wallpapers, bevelled gloss buttons, green SMS bubbles, and the iconic metallic dialer keypad? 
-
-**OldOS Android** brings that golden era of skeuomorphic UI back to life on your Android phone, engineered entirely from scratch using modern **Kotlin** and **Jetpack Compose**. It isn't just a static theme—it connects to your real Android system data so you can actually use it!
-
----
-
 ## ✨ Features
 
-### 1. SpringBoard & Desktop
-- **4×6 Authentic Grid**: 24 app icons per page with authentic iOS 4 typography, icon drop shadows, and circular notification badges.
-- **Dynamic Calendar Icon**: Automatically updates and displays today's weekday name and date, exactly like the original.
-- **Classic 3D Glass Dock**: Includes the translucent glass shelf and authentic 3D icon reflections.
-- **Jiggle Mode**: Long-press icons to enter edit mode with authentic wiggling animations.
-- **Multitasking Bar**: Double-tap the virtual Home button to slide the OS upward and reveal recent apps in a classic linen tray.
+### 1. SpringBoard & System
+- **Authentic Grid**: 4-column icon grid (80 pt cells, 60 pt icons) with drop shadows, badges and the mirrored-glass dock.
+- **Spotlight Search**: page 0 is a working Spotlight — dark scrim over the wallpaper, live search across all apps.
+- **Lock Screen**: big thin clock, shimmering *slide to unlock*, real unlock sound.
+- **Multitasking Tray**: double-tap the virtual home button; media controls are wired to the real iPod playback engine.
+- **Jiggle Mode**: long-press the wallpaper to edit icons.
+- **320 pt Design Canvas**: the whole OS renders on a virtual 320 pt-wide canvas scaled to your screen — tall phones simply get a longer home screen.
 
-### 2. Virtual Hardware Home Button
-- **Persistent Bottom Hardware Key**: Mimics the physical iPhone 4 recessed circular home button with the rounded square glyph.
-- **Tactile Haptic Feedback**: Delivers crisp haptic pulses on press and release.
-- **Gesture Controls**:
-  - **Single click**: Returns to Home Screen from any app, or exits edit/jiggle mode.
-  - **Double click**: Slides up the Multitasking tray.
+### 2. Built-in Apps
+| App | What works |
+|---|---|
+| **Phone** | Metallic dialer with DTMF tones, real call log, real contacts |
+| **Messages** | Real SMS threads (`content://sms`), classic green/silver gloss bubbles |
+| **Contacts** | Real address book, alphabetical sections, tap-to-dial detail page |
+| **Photos** | Real camera roll via MediaStore (4-column grid + swipeable viewer, Android 14 partial access aware) |
+| **iPod** | Real music library, Now Playing with album art; tray controls share the same player |
+| **Safari** | Live web via WebView in iOS 4 chrome (URL bar, progress, back/forward/bookmarks) |
+| **Weather** | Live data from Open-Meteo, hourly strip + 6-day forecast |
+| **Clock** | World Clock (live time zones), Stopwatch with laps, Timer, Alarms |
+| **Notes** | Yellow ruled-paper editor, persisted to local files |
+| **Calculator** | Working engine with glossy skeuomorphic keys |
+| **Settings** | Sounds, Brightness (real window brightness), Carrier selection, Wallpaper, General sub-pages — all persisted via DataStore |
 
-### 3. Phone App (真实电话与通话记录)
-- **Authentic Metallic Dialer**: Dark blue metallic gradient LCD display and skeuomorphic dialer buttons with authentic DTMF touch tones and vibration.
-- **Real Phone Calls**: Dial any number to launch a real cellular phone call.
-- **Real Call Log (Recents)**: Reads your actual phone call history from `CallLog.Calls` with missed calls highlighted in red and formatted timestamps.
-- **Real Contacts**: Synchronizes with your Android contacts via `ContactsContract`, with one-tap dialing.
-- **5-Tab Gloss Bar**: Favorites, Recents, Contacts, Keypad, and Voicemail.
+### 3. Real Chrome, Hand-drawn
+- Status bar in two authentic variants (light gradient in-app / dark overlay on springboard), with **live battery level, charging state and carrier name**.
+- Wi-Fi, signal, lock and battery glyphs are drawn with Canvas — no Material icon leakage.
+- The pinstripe grouped-table background is a tiled `ShaderBrush`, per the iOS 4 metric.
 
-### 4. Messages App (真实短信会话)
-- **Real SMS Conversations**: Reads conversation threads directly from Android's SMS content provider (`content://sms`).
-- **Authentic SMS Chat Bubbles**:
-  - Sent messages: Classic iOS 4 vibrant green gradient with curved glass gloss and bottom-right tail.
-  - Received messages: Matte silver/white bubble with bottom-left tail.
-- **Retro Navigation & Search**: Glossy search bar, unread blue dots, and threaded date headers.
+---
 
-### 5. Calculator App
-- **Retro LCD Display**: Classic seven-segment styled display numbers with copy-ready display.
-- **Authentic Keypad**: Dark grey numeric keys with orange operator buttons and metallic pressed states.
-- **Full Calculation Engine**: Real-time evaluation, chained operations, percentages, and decimals.
+## 📸 Screenshots
+
+| Clock (World) | Weather (live) | Notes | Contacts |
+| :---: | :---: | :---: | :---: |
+| <img src="screenshots/clock.png" width="220"/> | <img src="screenshots/weather.png" width="220"/> | <img src="screenshots/notes.png" width="220"/> | <img src="screenshots/contacts.png" width="220"/> |
 
 ---
 
 ## 🛠️ Architecture & Tech Stack
 
-- **Language**: Kotlin 2.0
-- **UI Toolkit**: Jetpack Compose (100% declarative UI, zero legacy XML views)
-- **Design System**: Fully custom iOS 4 Design System implemented via Compose Brushes, generic path bubble shapes, and custom layout modifiers.
-- **Concurrency**: Kotlin Coroutines & Flow for asynchronous ContentProvider reading.
-- **Audio & Haptics**: Android `ToneGenerator` for DTMF frequencies and `Vibrator` / `VibrationEffect` for tactile hardware button clicks.
-- **System Integration**: ContentResolver interfaces to `CallLog.Calls`, `ContactsContract.CommonDataKinds.Phone`, and `content://sms`.
+- **Language**: Kotlin 2.1
+- **UI Toolkit**: Jetpack Compose, 100% declarative
+- **Design system**: central tokens in `ui/theme/IOS4Palette.kt` (every gradient annotated with its source), full type scale in `Type.kt`
+- **Screen adaptation**: `IOS4DesignCanvas` maps the 320 pt design width onto the device, handles cutouts and gesture-nav exclusion
+- **Typography**: Inter (OFL) with platform CJK fallback
+- **Persistence**: DataStore (auto-observed via `snapshotFlow`)
+- **System data**: `CallLog`, `SMS`, `Contacts`, `MediaStore` (images + audio) via ContentResolver
+- **Visual regression**: Roborazzi screenshot suite (`gradlew recordRoborazziDebug`) — every screen is captured headlessly, no device needed
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Android Studio Hedgehog (2023.1.1) or newer
-- JDK 17
-- Android device or emulator running **Android 8.0 (API 26)** to **Android 14+ (API 34)**
+- Android Studio (recent) + JDK 17
+- Device or emulator on **Android 8.0 (API 26)+**
 
 ### Building from Source
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/zd200572/OldOS-Android.git
-   cd OldOS-Android
-   ```
+```bash
+git clone https://github.com/zd200572/OldOS-Android.git
+cd OldOS-Android
+./gradlew assembleDebug
+adb install -r -g app/build/outputs/apk/debug/app-debug.apk
+adb shell am start -n com.oldos.android/.MainActivity
+```
 
-2. Build the debug APK:
-   ```bash
-   ./gradlew assembleDebug
-   ```
+To regenerate the headless screenshots:
 
-3. Install on your connected device (with runtime permissions pre-granted for development):
-   ```bash
-   adb install -r -g app/build/outputs/apk/debug/app-debug.apk
-   ```
-
-4. Launch the app:
-   ```bash
-   adb shell am start -n com.oldos.android/.MainActivity
-   ```
+```bash
+./gradlew recordRoborazziDebug   # PNGs land in app/build/roborazzi/
+```
 
 ---
 
 ## 🔒 Permissions
 
-To provide authentic functionality, OldOS requests the following Android runtime permissions:
-
 | Permission | Purpose |
 |---|---|
-| `CALL_PHONE` | Allows making cellular calls directly from the dialer keypad |
-| `READ_CALL_LOG` | Displays your actual recent call history in the Recents tab |
-| `READ_SMS` | Loads your actual SMS conversations in the Messages app |
-| `READ_CONTACTS` | Populates the Contacts and Favorites tabs with your phonebook |
+| `CALL_PHONE` | Making cellular calls from the dialer |
+| `READ_CALL_LOG` | Recent calls in the Phone app |
+| `READ_SMS` | SMS conversations in Messages |
+| `READ_CONTACTS` | Contacts app / Favorites |
+| `READ_MEDIA_IMAGES` (+ partial `READ_MEDIA_VISUAL_USER_SELECTED`) | Camera roll (Android 13+; legacy `READ_EXTERNAL_STORAGE` below) |
+| `READ_MEDIA_AUDIO` | Music library for iPod |
+| `INTERNET` | Weather (Open-Meteo) and Safari |
 
 > [!NOTE]
-> On Xiaomi / MIUI / HyperOS devices, make sure to allow **"Read SMS"** and **"Service/Notification SMS"** under *Settings → Apps → OldOS → Permissions* to enable full SMS history viewing.
+> On Xiaomi / MIUI / HyperOS devices, allow **"Read SMS"** and related permissions under *Settings → Apps → OldOS → Permissions* for full functionality.
 
 ---
 
-## 📜 Credits
+## 📜 Credits & Licensing
 
-- Inspired by the open-source iOS project **[OldOS](https://github.com/zzanehip/OldOS)** by Zane Kleinberg (`@zzanehip`).
-- Original iOS 4 UI elements and concept © Apple Inc. This project is created for educational, historical, and preservation purposes.
+- **Code**: MIT — see [LICENSE](LICENSE).
+- **Image assets** (app icons, wallpapers, dock, tray linen, media glyphs): from [**The OldOS Project**](https://github.com/zzanehip/The-OldOS-Project) by Zane Kleinberg (`@zzanehip`), used under **CC BY 4.0**. Original artwork © Apple Inc. — included here for educational, historical and preservation purposes only.
+- **Font**: [**Inter**](https://rsms.me/inter/) 4.1 by Rasmus Andersson, licensed under the [SIL Open Font License 1.1](licenses/Inter-OFL.txt) (`res/font/`). Inter stands in for Helvetica Neue, which cannot be redistributed; CJK text falls back to the platform fonts.
+- **Design metrics**: color stops and dimensions were cross-checked against the [nOS4](https://github.com/1etu/nos4) recreation (its UIKit metrics files); only values are referenced, no code.
+- iPhone, iOS and the app designs recreated here are trademarks of Apple Inc. This is an independent tribute, not affiliated with or endorsed by Apple.
 
 ---
 

@@ -42,8 +42,8 @@ fun SpringBoardScreen(
     onEditModeChange: (Boolean) -> Unit = {},
     initialPage: Int = 1
 ) {
-    // Page 1 apps: 4 columns * 6 rows = 24 classic iOS 4 apps
-    val page1Apps = remember {
+    // Full springboard inventory (iOS 4 ordering)
+    val allApps = remember {
         listOf(
             // Row 1
             AppItem("messages", "Messages", R.drawable.ic_messages, badgeCount = 1),
@@ -69,13 +69,12 @@ fun SpringBoardScreen(
             AppItem("appstore", "App Store", R.drawable.ic_app_store),
             AppItem("gamecenter", "Game Center", R.drawable.ic_game_center),
 
-            // Row 5
+            // Extra apps overflow to page 2 (4 rows × 4 = 16 per page, as on real hardware)
             AppItem("facetime", "FaceTime", R.drawable.ic_facetime),
             AppItem("videos", "Videos", R.drawable.ic_videos),
             AppItem("compass", "Compass", R.drawable.ic_compass),
             AppItem("contacts", "Contacts", R.drawable.ic_contacts),
 
-            // Row 6
             AppItem("nike", "Nike+iPod", R.drawable.ic_nike),
             AppItem("music", "Music", R.drawable.ic_music),
             AppItem("cydia", "Cydia", R.drawable.ic_cydia),
@@ -83,11 +82,10 @@ fun SpringBoardScreen(
         )
     }
 
-    // Page 2 apps
-    val page2Apps = remember {
-        listOf(
-            AppItem("utilities_full", "Tools", R.drawable.ic_utilities)
-        )
+    // 16 apps per page (4×4), authentic to the 3.5" layout
+    val page1Apps = remember(allApps) { allApps.take(16) }
+    val page2Apps = remember(allApps) {
+        allApps.drop(16) + AppItem("utilities_full", "Tools", R.drawable.ic_utilities)
     }
 
     // Dock apps (4 pinned apps)

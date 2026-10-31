@@ -57,6 +57,9 @@ class MainActivity : ComponentActivity() {
         // Initialize audio effects
         SoundManager.init(this)
 
+        // Restore + auto-persist settings (DataStore)
+        com.oldos.android.model.SettingsStore.init(this)
+
         // Safe edge-to-edge layout
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
